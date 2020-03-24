@@ -1,13 +1,19 @@
 import React from 'react';
+import './chat.css';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import ChatBox from './components/ChatBox';
 import * as serviceWorker from './serviceWorker';
+import rootReducer from './reducers';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <ChatBox />
+  </Provider>,
   document.getElementById('root')
 );
 
