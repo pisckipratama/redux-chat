@@ -12,7 +12,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 /**
@@ -20,6 +20,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+var io = require('socket.io')(server);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -28,6 +29,17 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+io.on('connection', (socket) => {
+  console.log('dihubungkan');
+  //socket.emit('reload', null);
+  // when the client emits 'new message', this listens and executes
+  socket.on('add', (data) => {
+    // we tell the client to execute 'new message'
+    console.log('datang data dari frontend');
+    socket.broadcast.emit('reload', null);
+  });
+});
 
 /**
  * Normalize a port into a number, string, or false.
